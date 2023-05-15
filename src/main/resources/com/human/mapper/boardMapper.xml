@@ -53,7 +53,7 @@
 	<!-- [페이지] 게시글 목록 -->
 	<select id = "listWithPage" resultType = "Board">
 		<!-- CDATA : <> 기호를 태그로 인식하지 않고, 문자열로 사용되도록 한다 -->
-		<![CDATA[ddd
+		<![CDATA[
 			SELECT *
 			FROM (
 				SELECT a.*, ROWNUM rno
