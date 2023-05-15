@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-config.dtd">
+<!-- mybatis 설정에 대한 내용들이 정의됨 -->
+<configuration>
+	
+	<!-- 기본 세팅 -->	
+	<settings>
+		<!-- 언더스코어 케이스인 컬럼을 카멜 케이스로 변환하는 설정. 데이터베이스의 스네이크 케이스와 자바의 카멜케이스를 호환시켜준다 -->
+		<setting name="mapUnderscoreToCamelCase" value="true"/>		
+	</settings>
+
+	<typeAliases>
+		<!-- 테이블과 매핑할 DTO가 있는 경로를 지정한다 -->
+		<package name="com.human.domain"/>
+	</typeAliases>
+	
+
+
+</configuration>

@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org/"
+	  xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+	<meta charset="UTF-8">
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
+	<link type="text/css" rel="stylesheet" href="/styles/style.css" />
+	<link rel="stylesheet" type="text/css" href="http://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+	<script type="text/javascript" src="http://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.js" integrity="sha512-WNZwVebQjhSxEzwbettGuQgWxbpYdoLf7mH+25A7sfQbbxKeS5SQ9QBf97zOY4nOlwtksgDA/czSTmfj4DUEiQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.css" integrity="sha512-wR4oNhLBHf7smjy0K4oqzdWumd+r5/+6QO/vDda76MW5iug4PT7v86FoEkySIJft3XA0Ae6axhIvHrqwm793Nw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+		
+	<title>공지사항 목록</title>
+</head>
+<body>
+
+<div id="wrap">
+	  <!-- 최상단 내비게이션바 -->
+	<nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+	  <div class="container-fluid">
+	    <a class="navbar-brand" href="/">짭랩풋볼</a>
+	    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+	      <span class="navbar-toggler-icon"></span>
+	    </button>
+	    <div class="collapse navbar-collapse" id="navbarCollapse">
+	      <ul class="navbar-nav me-auto mb-2 mb-md-0">
+	       
+	        <li class="nav-item">
+	          <a class="nav-link active" aria-current="page" href="/board/aboutUs">About Us</a>
+	        </li>
+
+	        <li class="nav-item">
+	          <a class="nav-link" href="/match/list">매치참가</a>
+	        </li>
+	      
+	        <li class="nav-item">
+	          <a class="nav-link" href="/board/list">Review</a>
+	        </li>
+
+	        <li class="nav-item">
+	          <a class="nav-link" href="/notice/list">Notice</a>
+	        </li>
+
+	        <li class="nav-item">
+	          <a class="nav-link" href="/qna/list">QnA</a>
+	        </li>
+	      
+	      
+	      </ul>
+	      <!-- 비인증 시, 로그인 버튼 -->
+    		<!-- isAnonymous() : 인증되지 않은 사용자 이면 true, 아니면 false -->
+			<th:block sec:authorize="isAnonymous()">
+				<button type="button" onclick="location.href='/auth/login'" class="btn btn-primary mx-1">로그인</button>
+				<button type="button" onclick="location.href='/auth/join'" class="btn btn-primary mx-1">회원가입</button>
+			</th:block>
+	      
+	      
+	      <form action="/auth/logout" method="post" class="mx-3">
+				<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+				
+				<!-- 인증 시, 로그아웃 버튼 -->
+				<!-- isAuthenticated() : 인증된 사용자 이면 true, 아니면 false -->
+				<th:block sec:authorize="isAuthenticated()">
+					<!-- principal : 인증된 사용자 정보 객체 -->
+					<span id="userId" sec:authentication="principal.username" class="text-white"></span>
+					<button type="submit" class="btn btn-primary">로그아웃</button>
+					<button type="button" class="btn btn-success" onclick="location.href='/mypage/main'">마이페이지</button>					
+				</th:block>
+		</form>
+	      
+	      <form class="d-flex" role="search">
+	        <input class="form-control me-2" type="search" placeholder="검색어 입력" aria-label="Search">
+	        <button class="btn btn-outline-success" type="submit"><i class="bi bi-search"></i></button>
+	      </form>
+	    </div>
+	  </div>
+	</nav><br><br>
+	<!-- 최상단 내비게이션바 끝 -->	
+  <div id="header">
+    <h1><a href="#">짭랩풋볼</a></h1>
+    <h2>any comments</h2>
+    <ul id="nav">
+      <li><a href="/">홈</a><span>/</span></li>
+      <li><a href="/match/list">매치 참가</a><span>/</span></li>
+      <li sec:authorize="isAuthenticated()"><a href="/match/insert">매치 생성</a><span>/</span></li>
+      <li class="current"><a href="/board/list">게시판</a>
+        <ul>
+          <li><a href="/board/list">Review</a></li>
+          <li><a href="/notice/list">Notice</a></li>
+          <li><a href="/qna/list">QnA</a></li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+  <!--end header-->		
+	
+  <div id="main">	
+     <div id="portfolio-content">
+   	   <h2 class="page-title">게시판 >> Notice</h2>
+   	   <pre id="portfolio-intro"><b>공지사항입니다.
+      </b></pre>
+	
+	
+	<div id="review-table">
+		<!-- thead/tbody는 무조건 table태그 안에 들어와있어야함 -->	
+		<table>
+			<thead>
+				<tr>
+					<td><b>번호</b></td>
+					<td><b>제목</b></td>
+					<td><b>작성자</b></td><!-- 더레스큐는 작성자이름 첫글자 + ****로 작성자 이름이 들어간다. 나중에 구현해보자 -->
+					<td><b>작성일</b></td>
+				</tr>
+			</thead>
+			
+			<tbody>
+				<!-- th:block : 필요한 데이터를 블록으로 묶는 태그 -->
+				<!-- th:each : 타임리프 태그 반복문 -->
+				<th:block th:each= "notice : ${noticeList}">
+					<tr>
+						<!-- 번호 -->
+						<td th:text="${notice.noticeNo}" width="50" align="center"></td>					
+						<!-- 제목 -->
+						<td width="300">
+							<!-- a태그에 th:href 속성을 통해 클릭 시 board/read로 가게끔 만들어주자 -->
+							<a th:text="${notice.title}" th:href="|/notice/read?noticeNo=${notice.noticeNo}|"></a>
+						</td>					
+						<!-- 작성자 -->
+						<td th:text="${notice.writer}" width="100" align="center"></td>
+						<!-- 작성일 -->
+						<td width="100" align="center">
+							<!-- #유틸리티객체.메소드	: 타임리프의 유틸리티 객체의 기능 사용 -->
+							<!-- #dates.format(Date타입 데이터, '포맷') : Date타입 데이터를 지정한 포맷으로 출력 -->
+							<!-- 왜 굳이 span 태그를 사용했는지는 잘 모르겠노... -->
+							
+							<span th:text="${#dates.format(notice.regDate, 'yyyy-MM-dd')}"></span>
+							
+						</td>
+					</tr>
+				</th:block>
+			
+			</tbody>
+		</table>
+	
+	
+					
+		<!-- 작성하기버튼 -->
+		<div style="display: flex; justify-content: flex-end; width:600px;" >
+			<!-- <button id="insert" type="button" onclick="moveInsert()">작성하기</button> -->
+			<!-- <button type="button" class="btn btn-secondary" onclick="moveInsert()" th:style="${userId != '이지용'} ? 'display:none' : ''">매치생성</button> -->
+			<button type="button" class="btn btn-secondary" onclick="moveInsert()" th:style="${userId != '이지용'} ? 'display:none' : ''">작성하기</button>
+		</div>
+	
+	<!-- 페이지 버튼 -->	
+	<div style="display: flex; justify-content : center; width:520px;">
+	
+		<!-- 첫 페이지 -->
+		<a th:href="|/notice/list?pageNo=${page.firstPage}|">[처음]</a>
+	
+		<!-- 이전 페이지 -->
+		<th:block th:if="${page.prev > 0}">
+			<!-- 더레스큐 사이트의 review게시판에는 그냥 이전 버튼 [<] 누르면 이전 페이지로만 이동함 -->
+			<a th:href="|/notice/list?pageNo=${page.prev}|">[이전]	</a>
+		</th:block>
+		
+			<!--  타임리프 numbers.sequence()는 통째로 쓰인다 -->
+			<!-- EX)  <th:block th:each="num : ${#numbers.sequence(0,23)}"> -->
+		<!-- 1번~10번까지 -->	
+		<th:block th:each="no : ${#numbers.sequence( page.startPage, page.endPage )}">
+								<!-- ↑ .sequence(인자1, 인자2) 함수 : 인자1부터 인자2까지 반복을 해줌   -->
+			<b th:if="${no == page.pageNo}" style="font-size: 20px;">
+				<a href="|/notice/list?pageNo=${no}|" th:text="${no}"></a>
+			</b>
+			<th:block th:if="${no != page.pageNo}">
+				<a th:href="|/notice/list?pageNo=${no}|" th:text="${no}"></a>
+			</th:block>
+		</th:block>			
+
+		<!-- 다음 페이지 -->
+		<th:block th:if="${page.next <= page.LastPage}">
+			<!-- 더레스큐 사이트의 review게시판에는 그냥 이전 버튼 [<] 누르면 이전 페이지로만 이동함 -->
+			<a th:href="|/notice/list?pageNo=${page.next}|">[다음]	</a>
+		</th:block>
+		
+		<!-- 마지막 페이지 -->
+		<a th:href="|/notice/list?pageNo=${page.LastPage}|">[마지막]</a>
+	
+	  </div>	
+	
+	<!-- end 페이지버튼 -->
+	
+	</div>
+
+  </div>
+  <!--end main-->
+	
+</div>	
+<!--end wrap-->	
+	<script>
+		
+		var userId = document.getElementById("userId").innerText;
+		
+		function moveInsert() {
+			
+			location.href = "/notice/insert"
+			
+		}
+		
+		// 아이디가 이지용이 아니라면 매치생성 불가능하게
+		  // alert(userId);
+		  if (userId !== "이지용") {
+		    var matchInsert = document.querySelector('a[href="/match/insert"]').parentNode;
+		    matchInsert.style.display = "none";
+		  }
+		  
+	</script>	
+	
+	
+	
+	
+	
+</body>
+</html>

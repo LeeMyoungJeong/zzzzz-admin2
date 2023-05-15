@@ -1,0 +1,67 @@
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+
+<mapper namespace="com.human.mapper.BoardMapper">
+	
+	<!-- 게시글 목록 조회 -->
+	<select id = "list" resultType="Board">
+		SELECT *
+		FROM board
+		ORDER BY reg_date DESC
+	</select>
+
+	<!-- 게시글 입력 -->
+	<insert id = "insert">
+		INSERT INTO board ( board_no, title, writer, content)
+		VALUES ( SEQ_BOARD.nextval, #{title}, #{writer}, #{content} )
+	</insert>
+
+	<!-- 게시글 1개 읽어오기 -->
+	<select id="read" resultType="Board">
+		SELECT *
+		FROM board
+		WHERE board_no = #{boardNo}
+	</select>
+	
+	<!-- 게시글 수정 처리 -->
+	<update id="update">
+		UPDATE board
+			set title = #{title}
+			   ,writer = #{writer}
+			   ,content = #{content}
+			   ,upd_date = sysdate
+		WHERE board_no = #{boardNo}
+	</update>
+	
+	<!-- 게시글 삭제 처리 -->
+	<delete id = "delete">
+		DELETE 
+		  FROM board
+		 WHERE board_no = #{boardNo}
+	</delete>
+	
+	<!-- 게시글 전체 갯수 조회 -->
+	<select id="count" resultType="int">
+		<!-- resultType은 int이다. 왜냐면 개수 자체만 받아올것이기 때문에... -->
+		SELECT COUNT(*)
+		FROM board
+	</select>
+	
+	<!-- [페이지] 게시글 목록 -->
+	<select id = "listWithPage" resultType = "Board">
+		<!-- CDATA : <> 기호를 태그로 인식하지 않고, 문자열로 사용되도록 한다 -->
+		<![CDATA[ddd
+			SELECT *
+			FROM (
+				SELECT a.*, ROWNUM rno
+				FROM board a
+				ORDER BY board_no DESC
+			) b
+			WHERE b.rno >= #{startRowNo}
+			  AND b.rno <= #{endRowNo}		
+		]]>
+	</select>
+</mapper>

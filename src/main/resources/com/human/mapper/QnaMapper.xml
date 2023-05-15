@@ -1,0 +1,60 @@
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.human.mapper.QnaMapper">
+	
+	<!-- 질의응답 등록 -->
+	<insert id = "insert">
+		INSERT INTO qna ( qna_no, title, writer, content )
+		VALUES ( SEQ_QNA.nextval, #{title}, #{writer}, #{content} )
+	</insert>
+
+	<!-- 질의응답 조회 -->
+	<select id="read" resultType = "Qna">
+		SELECT *
+		FROM qna
+		WHERE qna_no = #{qnaNo}	
+	</select>
+
+	<!-- 질의응답 수정 -->
+	<update id="update">
+		UPDATE qna
+		   set title = #{title}
+		      ,writer = #{writer}
+		      ,content = #{content}
+		WHERE qna_no = #{qnaNo}
+	</update>	
+	
+	<!-- 질의응답 삭제 -->
+	<delete id="delete">
+		DELETE FROM qna
+		WHERE qna_no = #{qnaNo}
+	</delete>	
+	
+	<!-- 질의응답 개수 -->
+	<select id="count" resultType="int">
+		SELECT COUNT(*)
+		FROM qna
+	</select>
+	
+	<!-- [페이지] 질의응답 목록 -->
+	<select id="listWithPage" resultType="Qna">
+		<!-- CDATA :  <> 기호를 태그로 인식하지 않고, 문자열로 사용되도록 한다 -->
+		<![CDATA[
+			SELECT *
+			FROM (
+			    SELECT a.*, ROWNUM rno
+			    FROM qna a
+			    ORDER BY qna_no DESC
+			) b
+			WHERE b.rno >= #{startRowNo}
+			  AND b.rno <= #{endRowNo}
+			  
+		 ]]>
+	</select>	
+	
+	
+	
+	
+</mapper>

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org/"
+	  xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+	<meta charset="UTF-8">
+	<title>공지사항 작성</title>
+</head>
+<body>
+	
+	<div id = "notice-basic-view">
+	
+		<h3>Board > Notice</h3>
+		<p>공지사항 작성 화면</p>
+	
+	</div>
+	
+	<form action="/notice/insert" method="post" enctype="multipart/form-data">
+											<!--  - multipart/form-data  : 전송 데이터를 인코딩하지 않도록 지정  -->
+		<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+	
+		<table>
+			<!-- 제목 입력창 -->
+			<tr>
+				<td>제목</td>			
+				<td>
+					<input type="text" name="title">
+				</td>
+			</tr>
+			<!-- 작성자 창 -->
+			<tr>
+				<td>작성자</td>			
+				<td>
+					<input type="text" name="writer" th:value=${adminId} readonly>
+													<!-- DB에 USER 테이블 열이름이 user_id로 설정되어있음 -->
+				</td>
+			</tr>
+			<!-- 내용 입력창 -->
+			<tr>
+				<td>제목</td>			
+				<td>
+					<textarea name="content" cols="40" rows="10"></textarea>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>파일</td>			
+				<td>
+					<input type="file" name="files" multiple>
+				</td>
+			
+			</tr>		
+		
+		</table>
+		
+		
+	
+		<div>
+			<button type="submit">등록하기</button>
+			<button type="button" onclick="moveList">목록보기</button>
+		</div>
+		<div>	
+			<!-- 취소버튼 미구현 -->
+			<!-- 취소버튼 클릭 -> "취소 후 목록으로 돌아가시겠습니까?" alert버튼 출력 -> 확인 클릭 시 돌아가기 -->
+			<button type="button">취소</button>
+		</div>
+	</form>
+	
+	<script>
+	
+		function moveList() {
+			location.href = "/notice/list"
+		}
+	
+	</script>
+	
+</body>
+</html>

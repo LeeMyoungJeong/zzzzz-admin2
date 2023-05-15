@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org/"
+	  xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+	<meta charset="UTF-8">
+	<title>공지사항 수정</title>
+</head>
+<body>
+	<div id = "board-basic-view">
+		<h3>Notice</h3>
+		<h4>공지사항 수정화면입니다</h4>
+	</div>
+	
+	
+	<form action="/notice/update" method="post" id="form">
+		<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+		<input type="hidden" name="noticeNo" th:value = "${noticeNo}" readonly>
+		
+		<table>
+			<tr>
+				<!-- 제목 -->
+				<td>제목</td>
+				<td>
+					<input type="text" name="title" th:value=${notice.title}>
+				</td>
+			</tr>
+			<tr>
+				<!-- 작성자 -->
+				<td>작성자</td>
+				<td>
+					<input type="text" name="writer" th:value=${notice.writer}>
+				</td>
+			</tr>
+			<tr>
+				<!-- 제목 -->
+				<td>내용</td>
+				<td>
+					<textarea name="content" cols="40" rows="10" th:text=${notice.content}></textarea>
+				</td>
+			</tr>
+		
+			<!-- 썸네일 -->
+			<tr>
+				<td>썸네일</td>	
+				<td>
+					<ul>
+						<th:block th:each="file : ${fileList}">
+							<li style="list-style:none;"><!-- ul > li 태그의 점 없앰 -->
+								<img th:src="|/file/img?filePath=${file.filePath}|" width="200" th:alt="${file.fileName}"/>
+							</li>						
+						</th:block>					
+					</ul>				
+				</td>
+			</tr>			
+			<!-- 파일 목록 -->
+			<tr>
+				<td>파일</td>	
+				<td>
+					<ul>
+						<th:block th:each="file : ${fileList}">
+							<li>
+								<!-- 파일 다운로드 링크 -->
+								<a th:text="${file.fileName}" href="#" th:href="|/file/${file.fileNo}|"></a>
+								<!-- 파일 삭제 버튼 -->
+								<!-- 만약 삭제 요청자가 principal에서 가져온 접속자 자신과 board.getWriter()에서 가져온 boardUserId가 일치하면 아래 버튼 활성화 -->								
+								<th:block th:if="${writer}"> <!-- >> 이 문법이 의미하는 것은 if가 true냐는 것이다. -->	
+									<button type="button" th:id="|file-${file.fileNo}|" class="btn-file-delete" th:data="${file.fileNo}">삭제</button>
+														<!-- 여기서 id는 JS 실행을 위해 필요하다	-->
+								</th:block> 
+							</li>						
+						</th:block>					
+					</ul>				
+				</td>
+			</tr>					
+		
+		
+		
+		
+		</table>
+
+		<div>
+				<!-- 작성자 본인만 수정/삭제 가능하도록 하는 기능 구현해야 한다 -->
+				<button type="submit">수정</button>
+					<!-- 수정하시겠습니까?? 물어보면 좋을거같노 -->
+				<button type="button" onclick="moveDelete()">삭제</button>			
+					<!-- 삭제하시겠습니까?? 물어보면 좋을거같노 일단넘어가자-->
+				<!-- 작성자 본인만 수정/삭제 가능하도록 하는 기능 구현해야 한다 -->
+			
+				<button type="button" onclick="moveList()">목록보기</button>  
+		</div>
+	
+	</form>
+	
+	<script>
+
+		let form = document.getElementById("form")
+
+		
+		let noticeNo = "[[${notice.noticeNo}]]"	// boardNo가 정의되어있지 않아서 boardNo를 파라미터로 사용하는 [수정]클릭이 되지 않았음.
+	
+		let btnFileDelete = document.querySelectorAll(".btn-file-delete")
+		
+		// csrf_token을 정의해주고 같이 보내줘야 삭제가 정상적으로 이루어짐...ㅅㅂ그마 또 배운다 마이배웠데이~~~
+		let csrf_token = "[[${_csrf.token}]]"
+		let csrf_header = "[[${_csrf.headerName}]]"
+		
+		// 여기 아래의 자바스크립트 내용은 거의 이해가 안가지만 일단 작성해보자
+		for (let i = 0 ; i < btnFileDelete.length ; i++ ) {
+			
+				// 파일 삭제 버튼 클릭 이벤트
+				btnFileDelete[i].addEventListener('click', function() {
+					console.log(this) // 여기서 this는 btnFileDelete 버튼 그 자체	
+					let btn = this 
+					let fileNo =  this.getAttribute('data') // btnFileDelete에서 th:data 속성 가져온다.
+					
+						let data = {
+										"fileNo" : fileNo									
+									}
+					
+					let request = new XMLHttpRequest()
+					
+					request.open("POST", "/file/delete", true)
+						// ↑ 여기서 비동기 통신으로 FileController에 file/delete 호출
+						
+					// CSRF token 추가
+					request.setRequestHeader(csrf_header, csrf_token)	
+						
+						
+					request.setRequestHeader("Content-Type", "application/json")
+						// ↑ 여기서 XMLHTTPRequest 객체에 헤더이름을 Content-Type으로, 그 값은 application/json으로 
+						// HTTP 요청 헤더를 날림
+						// 이렇게 해서 컨트롤러에 file/delete에 fileNo를 날린다. 그럼 그 컨트롤러에서 fileService호출하고
+						// 데이터베이스에서 데이터 삭제, 실제 경로에 파일 삭제
+						// 그리고 아래에서 parentNode(li태그) 삭제까지 완료
+					request.send( JSON.stringify( data ) )
+					
+					request.onreadystatechange = function() { // 서버에서 응답이 도착하면 특정한 자바스크립트 함수를 호출할 수 있는 함수
+						
+						// 요청 성공 시
+						if ( request.readyState == request.DONE && request.status == 200 ) {
+							
+							console.log("파일 삭제 성공")
+							btn.parentNode.remove() // 버튼의 parentNode인 li태그를 삭제한다
+						}
+					}
+				})
+			}		
+		
+		
+		
+		function moveDelete() {
+			form.action = "/notice/delete"	// form 태그의 aciton 속성을 변경 : /notice/delete
+			form.submit()					// form 전송
+		}
+		
+		function moveList() {
+			location.href = "/notice/list"
+		}
+		
+	</script>
+</body>
+</html>

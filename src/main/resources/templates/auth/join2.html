@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org/"
+	  xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+	<meta charset="UTF-8">
+	<title>회원가입 화면</title>
+</head>
+<body>
+	
+	
+	<h1>회원가입</h1>
+	<form action="/auth/join" method="post">
+	
+		<input type="text" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"> <br><!-- 토큰은 복붙 -->
+		<input type="text" name = "userId" placeholder = "아이디"> <br>
+		<input type="password" name = "userPw" placeholder = "비밀번호" autoComplete="off"> <br> <!-- 보안상 비밀번호는 autoComplete 기능을 off 시켜놓아야한다  -->
+		<input type="password" name = "userPwChk" placeholder = "비밀번호확인" autoComplete="off"> <br>
+		<input type="text" name = "name" placeholder = "이름"> <br>
+		<input type="text" name = "email" placeholder = "이메일"> <br><!-- 이메일은 나중에 입력 타입을 꼭 email로 바꿔주자 -->
+		
+		<button type = "submit">회원가입</button>
+	
+	</form>
+	
+	
+	
+</body>
+</html>

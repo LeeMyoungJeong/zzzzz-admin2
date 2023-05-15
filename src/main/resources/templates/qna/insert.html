@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org/"
+	  xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+	<meta charset="UTF-8">
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
+	<link type="text/css" rel="stylesheet" href="/styles/style.css" />
+	<link rel="stylesheet" type="text/css" href="http://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+	<script type="text/javascript" src="http://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.js" integrity="sha512-WNZwVebQjhSxEzwbettGuQgWxbpYdoLf7mH+25A7sfQbbxKeS5SQ9QBf97zOY4nOlwtksgDA/czSTmfj4DUEiQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.css" integrity="sha512-wR4oNhLBHf7smjy0K4oqzdWumd+r5/+6QO/vDda76MW5iug4PT7v86FoEkySIJft3XA0Ae6axhIvHrqwm793Nw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+	<title>공지사항 작성</title>
+</head>
+<body>
+
+<div id="wrap">		
+
+	  <!-- 최상단 내비게이션바 -->
+	<nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+	  <div class="container-fluid">
+	    <a class="navbar-brand" href="/">짭랩풋볼</a>
+	    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+	      <span class="navbar-toggler-icon"></span>
+	    </button>
+	    <div class="collapse navbar-collapse" id="navbarCollapse">
+	      <ul class="navbar-nav me-auto mb-2 mb-md-0">
+	       
+	        <li class="nav-item">
+	          <a class="nav-link active" aria-current="page" href="/board/aboutUs">About Us</a>
+	        </li>
+	       
+	        <li class="nav-item">
+	          <a class="nav-link" href="/match/list">매치예약</a>
+	        </li>
+	        
+	        <li class="nav-item">
+	          <a class="nav-link" href="/board/list">Review</a>
+	        </li>
+
+	        <li class="nav-item">
+	          <a class="nav-link" href="/notice/list">Notice</a>
+	        </li>
+
+	        <li class="nav-item">
+	          <a class="nav-link" href="/qna/list">QnA</a>
+	        </li>
+	      
+	      
+	      </ul>
+	      <!-- 비인증 시, 로그인 버튼 -->
+    		<!-- isAnonymous() : 인증되지 않은 사용자 이면 true, 아니면 false -->
+			<th:block sec:authorize="isAnonymous()">
+				<button type="button" onclick="location.href='/auth/login'" class="btn btn-primary mx-1">로그인</button>
+				<button type="button" onclick="location.href='/auth/join'" class="btn btn-primary mx-1">회원가입</button>
+			</th:block>
+	      
+	      
+	      <form action="/auth/logout" method="post" class="mx-3">
+				<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+				
+				<!-- 인증 시, 로그아웃 버튼 -->
+				<!-- isAuthenticated() : 인증된 사용자 이면 true, 아니면 false -->
+				<th:block sec:authorize="isAuthenticated()">
+					<!-- principal : 인증된 사용자 정보 객체 -->
+					<span sec:authentication="principal.username" class="text-white"></span>
+					<button type="submit" class="btn btn-primary">로그아웃</button>
+					<button type="button" class="btn btn-success" onclick="location.href='/mypage/main'">마이페이지</button>					
+				</th:block>
+		</form>
+	      
+	      <form class="d-flex" role="search">
+	        <input class="form-control me-2" type="search" placeholder="검색어 입력" aria-label="Search">
+	        <button class="btn btn-outline-success" type="submit"><i class="bi bi-search"></i></button>
+	      </form>
+	    </div>
+	  </div>
+	</nav><br><br>
+	<!-- 최상단 내비게이션바 끝 -->
+	<div id="main">
+		<div id="portfolio-content">	
+	
+	
+	<div id = "notice-basic-view">
+	
+		<h3>Board > Q & A</h3>
+	
+	</div>
+	
+	<form action="/qna/insert" method="post" enctype="multipart/form-data">
+											<!--  - multipart/form-data  : 전송 데이터를 인코딩하지 않도록 지정  -->
+		<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+	
+		<table>
+			<!-- 제목 입력창 -->
+			<tr>
+				<td>제목</td>			
+				<td>
+					<input type="text" name="title">
+				</td>
+			</tr>
+			<!-- 작성자 창 -->
+			<tr>
+				<td>작성자</td>			
+				<td>
+					<input type="text" name="writer" th:value=${userId} readonly>
+													<!-- DB에 USER 테이블 열이름이 user_id로 설정되어있음 -->
+				</td>
+			</tr>
+			<!-- 내용 입력창 -->
+			<tr>
+				<td>제목</td>			
+				<td>
+					<textarea name="content" cols="40" rows="10"></textarea>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>파일</td>			
+				<td>
+					<input type="file" name="files" multiple>
+				</td>
+			
+			</tr>		
+		
+		</table>
+		
+		
+	
+		<div>
+			<button type="submit">등록하기</button>
+			<button type="button" onclick="moveList">목록보기</button>
+		</div>
+		<div>	
+			<!-- 취소버튼 미구현 -->
+			<!-- 취소버튼 클릭 -> "취소 후 목록으로 돌아가시겠습니까?" alert버튼 출력 -> 확인 클릭 시 돌아가기 -->
+			<button type="button">취소</button>
+		</div>
+	</form>
+
+	    </div>
+	    <!--end portfolio-content-->	
+	</div>
+	<!--end main-->
+</div>
+<!--end wrap-->	
+
+	<script>
+	
+		function moveList() {
+			location.href = "/notice/list"
+		}
+	
+	</script>
+	
+</body>
+</html>

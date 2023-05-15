@@ -1,0 +1,103 @@
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.human.mapper.MatchMapper">
+	
+	<!-- 매치 리스트 -->
+	<select id= "list" resultType="Match">
+		SELECT *
+		FROM match
+		ORDER BY reg_date DESC
+	</select>
+	
+	
+	<!-- 매치 생성 -->
+	<insert id = "insert">
+		INSERT INTO match ( match_no, play_date, play_time, ground_name, max_player_no, fee )
+		VALUES ( SEQ_MATCH.nextval, #{playDate}, #{playTime}, #{groundName}, #{maxPlayerNo}, #{fee} )
+	</insert>
+
+	<!-- 매치 조회 -->
+	<select id="read" resultType="Match">
+		SELECT *
+		FROM match
+		WHERE match_no = #{matchNo}
+	</select>
+	
+	<select id="readPic" resultType="GroundPic">
+	    SELECT GROUND_NAME, FIRST_GP, SECOND_GP, THIRD_GP, GROUND_ADDRESS
+	    FROM ground
+	    WHERE ground_name = #{groundName}
+	</select>
+
+	<!-- 매치 삭제 -->
+	<delete id = "delete">
+		DELETE 
+		  FROM match
+		 WHERE match_no = #{matchNo}
+	</delete>
+
+	<select id="matchCheck" resultType="int">
+        SELECT points 
+        FROM users 
+        WHERE user_id = #{userId}
+    </select>
+    
+    
+
+	<!-- 매치 희망 인원 명단 등록 -->
+	<insert id="insertPlayer">
+		INSERT INTO players ( player_no, parents_match_no, player_name , payment )
+		VALUES ( SEQ_player.nextval, #{parentsMatchNo}, #{playerName} , #{payment} )
+	</insert>
+	
+	<select id="countTotalPlayer" resultType="int"> 
+		<!-- resultType은 int다. 왜냐하면 개수 자체만 받아올것이기 때문-->
+		SELECT COUNT(*)
+		FROM players
+		WHERE parents_match_no = #{matchNo}
+	</select>	
+	
+	<select id="playerList" resultType = "Players">
+		SELECT *
+		FROM players
+		WHERE parents_match_no = #{matchNo}
+	</select>
+	
+	<update id="pay">
+        UPDATE users
+        SET points = points - #{payment}
+        WHERE user_id = #{playerName}	
+	</update>
+	
+	<update id="playerUpdate">
+		UPDATE match m
+		SET m.players = (
+		    SELECT COUNT(*) 
+		    FROM players p
+		    WHERE p.parents_match_no = m.match_no
+		)	
+	</update>
+	
+	
+	<!-- 마이페이지에서 내가 신청한 매치 목록 조회하기 -->
+	<select id= "myMatchList" resultType="Match">
+		SELECT *
+		FROM match
+		WHERE match_no IN (
+		  SELECT parents_match_no
+		  FROM players
+		  WHERE player_name = #{userId}
+		)
+	</select>
+
+	
+	<!-- 마이페이지에서 내가 신청한 매치 취소하기 -->
+	<delete id = "cancelPlayer" parameterType="hashmap">
+		DELETE FROM players 
+		WHERE player_name = #{userId} 
+		AND parents_match_no = #{matchNo}
+	</delete>
+
+</mapper>
