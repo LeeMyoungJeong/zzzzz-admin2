@@ -64,7 +64,7 @@
 				<!-- isAuthenticated() : 인증된 사용자 이면 true, 아니면 false -->
 				<th:block sec:authorize="isAuthenticated()">
 					<!-- principal : 인증된 사용자 정보 객체 -->
-					<span sec:authentication="principal.username" class="text-white"></span>
+					<span id="userId" sec:authentication="principal.username" class="text-white"></span>
 					<button type="submit" class="btn btn-primary">로그아웃</button>
 					<button type="button" class="btn btn-success" onclick="location.href='/mypage/main'">마이페이지</button>				
 				</th:block>
@@ -83,16 +83,11 @@
     <h1><a href="#">짭랩풋볼</a></h1>
     <h2>any comments</h2>
     <ul id="nav">
-      <li class="current"><a href="/">홈</a><span>/</span></li>
-      <li><a href="/ground/register">제휴구장 등록</a><span>/</span></li>
-      <li><a href="/match/insert">매치 생성</a><span>/</span></li>
-      <li><a href="/board/list">게시판</a>
-        <ul>
-          <li><a href="/board/list">Review</a></li>
-          <li><a href="/notice/list">Notice</a></li>
-          <li><a href="/qna/list">QnA</a></li>
-        </ul>
-      </li>
+      <li><a href="/">홈</a><span>/</span></li>
+      <li><a href="/match/list">내 정보</a><span>/</span></li>
+       <li><a href="/mypage/charge">포인트 충전</a><span th:style="${userId != '이지용'} ? 'display:none' : ''">/</span></li>
+       <li class="current" th:style="${userId != '이지용'} ? 'display:none' : ''"><a href="/ground/groundList">제휴구장 목록</a></li>
+      <li th:style="${userId != '이지용'} ? 'display:none' : ''"><span>/</span><a href="/mypage/sales">매출 관리</a></li>
     </ul>
   </div>
   <!--end header-->		

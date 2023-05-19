@@ -640,3 +640,12 @@ thead td div {
 .tdContent a {
   font-weight: bold;
 }
+
+
+.kakaoLoginButton {
+  background-image: url(../images/kakao_login.png);
+  background-repeat: no-repeat;
+  /* background-size: cover; */
+  /* 원하는 스타일 및 크기를 추가로 지정할 수 있습니다. */
+}
+

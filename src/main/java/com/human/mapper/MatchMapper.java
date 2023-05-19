@@ -53,4 +53,16 @@ public interface MatchMapper {
 
 	// 플레이어가 매치 취소할 때 실행할 메소드
 	public int cancelPlayer(Map<String, Object> paramMap);
+	
+	// 완료된 매치 리스트 가져오기
+	public List<Match> endMatchList() throws Exception;
+	
+	// 완료된 매치 참여자 포인트 환급하기
+	public int pointRefund(int matchNo) throws Exception;
+	
+	// 환급 완료 처리하기
+	public int refundCheck(int matchNo) throws Exception;
+	
+	// 환급 완료한 매치에서 환급여부 조회하기
+	public int refundYn(int matchNo) throws Exception;
 }

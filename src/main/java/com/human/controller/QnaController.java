@@ -35,6 +35,7 @@ public class QnaController {
 	
 	// 질의응답 목록
 	@GetMapping("/qna/list")
+	@PreAuthorize("hasAnyRole('ADMIN','USER')")
 	public String list(Model model, Page page) throws Exception {
 		
 		List<Qna> qnaList = qnaService.list(page);

@@ -22,5 +22,11 @@
         FROM users 
         WHERE user_id = #{userId}
     </select>
+    
+    <select id="findByUser" parameterType="Users" resultType="Users">
+    SELECT user_id as userId, user_pw as password, enabled, email
+ 	  FROM users
+ 	  WHERE email = #{email}
+    </select>
 
 </mapper>

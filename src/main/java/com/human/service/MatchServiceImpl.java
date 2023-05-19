@@ -132,6 +132,19 @@ public class MatchServiceImpl implements MatchService{
 		return matchMapper.cancelPlayer(paramMap);
 	}
 
+	// 완료된 매치 리스트 가져오기
+	@Override
+	public List<Match> endMatchList() throws Exception {
+		return matchMapper.endMatchList();
+	}
+
+	
+	// 완료된 매치 참여자 포인트 환급하기
+	@Override
+	public int pointRefund(int matchNo) throws Exception {
+		return matchMapper.pointRefund(matchNo);
+	}
+
 	
 	
 	

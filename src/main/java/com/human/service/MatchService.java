@@ -44,4 +44,10 @@ public interface MatchService {
 	// 매치 취소하기
 	public int cancelPlayer(String userId, int matchNo) throws Exception;
 	
+	// 완료된 매치 조회 (정산하기)
+	public List<Match> endMatchList() throws Exception;
+	
+	// 완료된 매치 정산하기
+	public int pointRefund(int matchNo) throws Exception;
+	
 }

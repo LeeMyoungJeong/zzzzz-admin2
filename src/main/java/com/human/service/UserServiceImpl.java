@@ -94,9 +94,13 @@ public class UserServiceImpl implements UserService {
 	}
 
 
+	@Override
+	public Users findByUser(Users user) throws Exception {
+
+		return userMapper.findByUser(user);
+	}
 
 
-	
 
 
 }

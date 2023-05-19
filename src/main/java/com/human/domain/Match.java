@@ -17,7 +17,9 @@ public class Match {
 	private int players;
 	private int fee;
 	private String leader;
-	private String groundPic; 
+	private String groundPic;
+ 
+	private int refundYn; // 환불 여부
 	
 	// 첨부파일
 	private MultipartFile[] files;

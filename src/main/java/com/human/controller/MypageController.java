@@ -32,12 +32,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.human.domain.GroundPic;
 import com.human.domain.KakaoPayApproveVO;
 import com.human.domain.KakaoPayReadyVO;
 import com.human.domain.Match;
+import com.human.domain.Players;
+import com.human.mapper.MatchMapper;
 import com.human.service.MatchService;
 import com.human.service.MypageService;
-import com.human.service.PayService;
+//import com.human.service.PayService;
 
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.*;
@@ -54,11 +57,14 @@ public class MypageController {
 	@Autowired
 	private MypageService mypageService;
 	
-	@Autowired
-	private PayService payService;
+	//@Autowired
+	//private PayService payService;
 	
 	@Autowired
 	private MatchService matchService;
+	
+	@Autowired
+	private MatchMapper matchMapper;
 	
 	//////////////////////////////////////////////////////
 	
@@ -84,11 +90,63 @@ public class MypageController {
 	}
 	
 	@GetMapping("/mypage/kakaoPay")
+	@PreAuthorize("hasRole('ADMIN')")
 	public String mypageView() throws Exception {
 		return "/mypage/kakaoPay";
 	}
 	
+	// 종료된 매치 환급하기
+	@GetMapping(path="/mypage/endMatchPlayer", params = "matchNo")
+	@PreAuthorize("hasAnyRole('ADMIN','USER')")
+	public String endMatchPlayer(Model model, int matchNo, String groundName, Principal principal) throws Exception {
+		
+		
+		String userId = principal.getName();
+		model.addAttribute("userId", userId);
+		
+		// 환불여부
+		int refundYn = matchMapper.refundYn(matchNo);
+		log.info("refundYn : " + refundYn);
+		
+		List <Players> playerList = matchService.playerList(matchNo);
+		model.addAttribute("playerList", playerList);
+		log.info("playerList : " + playerList);
+		Match match = matchService.read(matchNo);
+		int totalPlayer = matchService.countTotalPlayer(matchNo);
+		GroundPic groundPic = matchService.readPic(groundName);
+		model.addAttribute("totalPlayer", totalPlayer);
+		model.addAttribute("groundPic", groundPic);
+		model.addAttribute("matchNo", matchNo);
+		model.addAttribute("match", match);
+		model.addAttribute("refundYn", refundYn);
+		
+		
+		return "/mypage/endMatchPlayer";
+		
+	}
+	
+	
+	
+	
+	
+	// 매출관리 페이지 - 게임이 끝난 매치 확인하고 포인트 환급 및 정산하기
+	@GetMapping("/mypage/sales")
+	@PreAuthorize("hasRole('ADMIN')")
+	public String sales(Model model, Principal principal) throws Exception {
+		
+		// 환불여부
+		// int refundYn = matchMapper.refundYn(matchNo);
+		List <Match> endMatchList = matchService.endMatchList();
+		log.info("endMatchList : " + endMatchList);
+		String userId = principal.getName();
+		model.addAttribute("userId", userId);
+		model.addAttribute("endMatchList", endMatchList);
+		log.info("매출관리페이지 호출");
+		return "/mypage/sales";
+	}
 
+	
+	
 	
 	// 결제 페이지 호출
     @GetMapping("/mypage/charge")
@@ -148,6 +206,8 @@ public class MypageController {
     	
     	return "/mypage/success";
     }
+    
+    
     
     
 }

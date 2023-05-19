@@ -38,6 +38,7 @@ public class NoticeController {
 	
 	// 공지사항 목록 조회 화면 - Get 
 	@GetMapping("/notice/list")
+	@PreAuthorize("hasAnyRole('ADMIN','USER')")
 	public String list(Model model, Page page, Principal principal) throws Exception {
 		
 		List<Notice> noticeList = noticeService.list(page);

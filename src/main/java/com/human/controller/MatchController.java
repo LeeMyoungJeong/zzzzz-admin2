@@ -51,9 +51,15 @@ public class MatchController {
 	
 	// 매치 리스트 가져오기 화면 - Get
 	@GetMapping("/match/list")
+	@PreAuthorize("hasAnyRole('ADMIN','USER')")
 	public String list(Model model, Principal principal) throws Exception {
 		
 		String userId = principal.getName();
+		
+		if(userId == null) {
+			return "/index";
+		}
+		
 		model.addAttribute("userId", userId);
 		
 		List <Match> matchList = matchService.list();
@@ -223,6 +229,29 @@ public class MatchController {
 	}
 
 
+	// 매치 참여자 환급하기
+	@GetMapping("/pointRefund")
+	@ResponseBody
+	public String pointRefund(@RequestParam("matchNo") int matchNo) throws Exception {
+		
+		int result = matchService.pointRefund(matchNo);
+		int totalPlayer = matchService.countTotalPlayer(matchNo);
+		
+		// 환급 완료 시 환급완료 처리하기
+		int refundCheck = matchMapper.refundCheck(matchNo);
+		
+		log.info("totalPlayer(포인트환급받아야할 인원수) : " + totalPlayer);
+		log.info("result(충전 완료된 인원수인가?) : " + result);
+		
+		if (result >= 1) {
+	        return "success";
+	    } else {
+	        return "fail";
+	   }
+		
+		// return totalPlayer;
+	}
+	
 
 }
 

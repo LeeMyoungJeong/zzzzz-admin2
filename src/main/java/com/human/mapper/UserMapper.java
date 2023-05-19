@@ -16,4 +16,6 @@ public interface UserMapper {
 	
 	// 아이디 중복 확인
     public int checkUserId(String userId) throws Exception;
+
+	public Users findByUser(Users user);
 }

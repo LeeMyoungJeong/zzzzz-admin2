@@ -42,13 +42,14 @@ public class GroundController {
 	
 	// 제휴 구장 목록 - 화면 Get
 	@GetMapping("/ground/groundList")
-	public String groundList(Model model, Ground ground) throws Exception {
+	public String groundList(Model model, Ground ground, Principal principal) throws Exception {
 		
 		List <Ground> groundList = groundService.groundList();
+		String userId = principal.getName();
 		
 		log.info("groundList : " + groundList);
 		model.addAttribute("groundList", groundList);
-		
+		model.addAttribute("userId", userId);
 		return "/ground/groundList";
 	}
 	

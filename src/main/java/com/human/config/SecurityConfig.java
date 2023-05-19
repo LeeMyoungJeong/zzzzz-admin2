@@ -49,6 +49,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 		
 		// 인가처리를 위한 메소드 ( 권한의 범위 )
 		http.authorizeHttpRequests()      //--> 이게 없어서 서버 연결 자체가 불가했음
+			.antMatchers("/test").permitAll()
 			.antMatchers("/").permitAll()
 			.antMatchers("/auth/**").permitAll()
 			.antMatchers("/board/**").permitAll()

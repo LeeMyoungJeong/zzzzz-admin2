@@ -100,4 +100,42 @@
 		AND parents_match_no = #{matchNo}
 	</delete>
 
+	<!-- 완료된 매치 리스트 (정산용) -->
+	<select id= "endMatchList" resultType="Match">
+		<![CDATA[
+			SELECT *
+			FROM match
+			WHERE play_date < sysdate
+			ORDER BY match_no DESC
+		]]>
+	</select>
+	
+	<!-- 완료된 매치 참여자 포인트 환급 -->
+	<update id="pointRefund">
+		UPDATE users
+		SET points = points + 800
+		WHERE user_id IN (
+		  SELECT u.user_id
+		  FROM players p
+		  JOIN users u ON p.player_name = u.user_id
+		  WHERE p.parents_match_no = #{matchNo}
+		)	
+	</update>
+
+	<!-- 환급 완료한 매치는 완료처리하기 -->
+	<update id = "refundCheck">
+		UPDATE match
+		SET REFUND_YN = 1
+		WHERE match_no = #{matchNo}
+	</update>
+
+	<!-- 환급 완료한 매치는 더 이상 환급 못하도록 막기 위해 환불 완료값 가져오기 -->
+	<select id="refundYn" resultType="int">
+		SELECT REFUND_YN
+		FROM match
+		WHERE match_no = #{matchNo}
+	</select>
+
+
+
 </mapper>

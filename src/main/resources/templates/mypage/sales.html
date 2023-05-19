@@ -17,7 +17,7 @@
 	    <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery.slick/1.6.0/slick.min.js"></script>
 <head>
 	<meta charset="UTF-8">
-	<title>마이페이지</title>
+	<title>매출 관리</title>
 </head>
 
 <body>
@@ -92,7 +92,7 @@
     <h1><a href="#">짭랩풋볼</a></h1>
     <h2>any comments</h2>
     <ul id="nav">
-      <li class="current"><a href="/">홈</a><span>/</span></li>
+      <li><a href="/">홈</a><span>/</span></li>
       <li><a href="/match/list">내 정보</a><span>/</span></li>
       <li><a href="/mypage/charge">포인트 충전</a><span th:style="${userId != '이지용'} ? 'display:none' : ''">/</span></li>
         <ul>
@@ -103,8 +103,7 @@
       </li>
       <!-- 제휴구장 목록은 관리자만 볼 수 있게 해야함 -->
       <li th:style="${userId != '이지용'} ? 'display:none' : ''"><a href="/ground/groundList">제휴구장 목록</a></li>
-      <li th:style="${userId != '이지용'} ? 'display:none' : ''"><span>/</span><a href="/mypage/sales">매출 관리</a></li>
-      
+      <li class="current"th:style="${userId != '이지용'} ? 'display:none' : ''"><span>/</span><a href="/mypage/sales">매출 관리</a></li>
      
     </ul>
   </div>
@@ -113,11 +112,8 @@
 
     <div id="main">
 		<div id="portfolio-content">
-			<h2 class="page-title" th:text="|${userId} 님의 마이페이지|"></h2>
-			<h3 class="page-title" th:text="|잔여포인트 : ${point}원|"></h3>
-			<br>
-			
-			<h4>내가 신청한 매치</h4>	
+			<h2>매출 관리</h2>
+			<h4>포인트 환급 & 매출 정산 (완료된 경기)</h3>	
 			<!-- <button id=chargebtn onclick="requestPayment()"><img src="/images/payment_icon_yellow_medium.png" class="button-no-border" alt="카카오페이버튼" style="border:none;"></button> -->
 	<div id="review-table">
 		<!-- thead/tbody는 무조건 table태그 안에 들어와있어야함 -->	
@@ -129,16 +125,15 @@
 					<td class="tableHead" width="80" align="center"><div style="text-align:center">날짜</div></td>
 					<td class="tableHead" width="110" align="center"><div style="text-align:center">시작시간</div></td>
 					<td class="tableHead" width="450" align="center" style="font-weight: bold;">장소</td><!-- 더레스큐는 작성자이름 첫글자 + ****로 작성자 이름이 들어간다. 나중에 구현해보자 -->
-					<td class="tableHead" width="50" align="center"><div style="text-align:center">인원</div></td>
-					<td class="tableHead" width="100" align="center"><div style="text-align:center">현재인원</div></td>
-					<td class="tableHead" width="100" align="center"><div style="text-align:center">진행여부</div></td>
+					<td class="tableHead" width="100" align="center"><div style="text-align:center">참여인원</div></td>
+					<td class="tableHead" width="100" align="center"><div style="text-align:center">정산여부</div></td>
 				</tr>
 			</thead>
 			
 			<tbody>
 				<!-- th:block : 필요한 데이터를 블록으로 묶는 태그 -->
 				<!-- th:each : 타임리프 태그 반복문 -->
-				<th:block th:each= "match : ${myMatchList}">
+				<th:block th:each= "match : ${endMatchList}">
 					<tr>
 						<!-- 매치번호 -->
 						<td id="matchNo" class="tdContent" th:text="${match.matchNo}" width="100" style="text-align:center"></td>					
@@ -154,22 +149,17 @@
 							<!-- #유틸리티객체.메소드	: 타임리프의 유틸리티 객체의 기능 사용 -->
 							<!-- #dates.format(Date타입 데이터, '포맷') : Date타입 데이터를 지정한 포맷으로 출력 -->
 							<!-- 왜 굳이 span 태그를 사용했는지는 잘 모르겠노... -->
-							<a th:text="${match.groundName}" th:href="|/match/read?matchNo=${match.matchNo}&groundName=${match.groundName}|"></a>
+							<a th:text="${match.groundName}" th:href="|/mypage/endMatchPlayer?matchNo=${match.matchNo}&groundName=${match.groundName}|"></a>
 						</td>
-						<!-- 참여인원 -->
-						<td class="tdContent" th:text="${match.maxPlayerNo}" width="50" style="text-align:center"></td>
+						
 						<!-- 현재인원 -->
 						<td class="tdContent" th:text="${match.players}" width="80" style="text-align:center"></td>
-						<!-- 진행여부 -->
-						<td class="tdContent" width="80" style="text-align:center">
+						<!-- 정산여부 -->
+						<td class="tdContent" th:text="${match.refundYn == 1 ? '완료' : '미완료'}" width="80" style="text-align:center">
 							<!-- <a th:text="${#dates.format(#dates.createNow().time, 'yyyy-MM-dd') &lt; #dates.format(match.playDate, 'yyyy-MM-dd') ? '예정' : '완료'}"></a> -->
 							<!-- <a th:text="${#dates.format(#dates.createNow().time, 'yyyy-MM-dd') &lt; #dates.format(match.playDate, 'yyyy-MM-dd') ? '예정' : '완료'}" th:href="|/match/read?matchNo=${match.matchNo}&groundName=${match.groundName}|"></a> -->
 							<!-- <a th:text="${#dates.format(#dates.createNow().time, 'yyyy-MM-dd') &lt; #dates.format(match.playDate, 'yyyy-MM-dd') ? '예정' : '완료'}" th:href="${#dates.format(#dates.createNow().time, 'yyyy-MM-dd') &lt; #dates.format(match.playDate, 'yyyy-MM-dd') ? '/match/read?matchNo=' + match.matchNo + '&groundName=' + match.groundName : '#'}"></a> -->
   							<!-- <a th:text="${#dates.format(#dates.createNow().time, 'yyyy-MM-dd') &lt; #dates.format(match.playDate, 'yyyy-MM-dd') ? '예정' : '완료'}" th:href="${#dates.format(#dates.createNow().time, 'yyyy-MM-dd') &lt; #dates.format(match.playDate, 'yyyy-MM-dd') ? '/match/read?matchNo=' + match.matchNo + '&groundName=' + match.groundName : 'javascript:void(0)'}" th:if="${#dates.format(#dates.createNow().time, 'yyyy-MM-dd') &lt; #dates.format(match.playDate, 'yyyy-MM-dd')}"></a> -->
-  							<a th:text="${#dates.format(#dates.createNow().time, 'yyyy-MM-dd') &lt; #dates.format(match.playDate, 'yyyy-MM-dd') ? '예정(취소가능)' : '완료'}" 
-  							th:href="${#dates.format(#dates.createNow().time, 'yyyy-MM-dd') &lt; #dates.format(match.playDate, 'yyyy-MM-dd') ? '#' : '#'}" 
-  							th:if="${#dates.format(#dates.createNow().time, 'yyyy-MM-dd') &lt; #dates.format(match.playDate, 'yyyy-MM-dd')}" onclick="confirmCancellation()" ></a>
-  							<span th:text="${#dates.format(#dates.createNow().time, 'yyyy-MM-dd') &gt;= #dates.format(match.playDate, 'yyyy-MM-dd') ? '완료' : ''}"></span>	
 						</td>
 					
 						
@@ -243,6 +233,33 @@ function confirmCancellation() {
 	 		 xhr.send();
 		  }
 	}
+
+// 포인트 800원씩 돌려주기
+function pointRefund() {
+	
+	var matchNo = document.getElementById('matchNo').textContent;
+	var xhr = new XMLHttpRequest();	
+	
+	if (confirm (matchNo + "번 매치 참여자들에게 포인트를 환급하겠습니까?")) {
+		
+		xhr.open('POST', '/pointRefund', true);
+		alert("요청이 실행되지 않고있다....................");
+		xhr.onload = function() {
+			if(xhr.status === 200) {
+				if (xhr.responseText.trim() === "success") {
+					alert("포인트 환급 합니다.");
+					//location.href = "/mypage/sales";
+				} else {
+					alert("포인트 환급 못합니다.")
+				}
+			} 
+		};
+		xhr.send();
+	}
+	
+	
+	}
+
 
 </script>	
 
