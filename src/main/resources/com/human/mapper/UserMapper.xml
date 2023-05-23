@@ -10,6 +10,12 @@
 		VALUES ( SEQ_USER.nextval, #{userId}, #{userPw}, #{name}, #{email}, #{phone} )
 	</insert>
 
+	<!-- 회원 등록하는 쿼리 -->
+	<insert id="nonmemberJoin">
+		INSERT INTO users ( user_no, user_id, user_pw, name, email, phone )
+		VALUES ( SEQ_USER.nextval, #{userId}, #{userPw}, #{name}, #{email}, #{phone} )
+	</insert>
+
 	<!-- 권한을 등록하는 쿼리 -->
 	<insert id="insertAuth">
 		INSERT INTO user_auth ( auth_no, user_id, auth )
@@ -23,10 +29,19 @@
         WHERE user_id = #{userId}
     </select>
     
+    <!-- 카카오 서버로부터 받은 아이디 정보를 통해 가입자 찾기 -->
     <select id="findByUser" parameterType="Users" resultType="Users">
-    SELECT user_id as userId, user_pw as password, enabled, email
+    <!-- SELECT user_id as userId, user_pw as password, enabled, email -->
+      SELECT *
  	  FROM users
  	  WHERE email = #{email}
+    </select>
+	
+	<!-- 아이디 중복 확인 -->
+    <select id="findFromMyinfo" resultType="Users">
+        SELECT * 
+        FROM users 
+        WHERE user_id = #{userId}
     </select>
 
 </mapper>

@@ -4,10 +4,21 @@
 
 <mapper namespace="com.human.mapper.MypageMapper">
 	
+	<!-- 포인트 가져오기 -->
 	<select id = "pointRead" resultType="Int">
 		SELECT points
 		FROM users
 		WHERE user_id = #{userId}
 	</select>
+
+	<!-- 회원 정보 수정 -->
+	<update id="update">
+		UPDATE Users
+			set user_pw = #{userPw}
+			   ,name = #{name}
+			   ,email = #{email}
+			   ,phone = #{phone}
+		WHERE user_id = #{userId}
+	</update>
 
 </mapper>

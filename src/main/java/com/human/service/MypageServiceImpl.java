@@ -12,6 +12,7 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
 import com.human.domain.KakaoPayApproveVO;
+import com.human.domain.Users;
 import com.human.mapper.MypageMapper;
 
 import okhttp3.internal.http.HttpMethod;
@@ -31,6 +32,13 @@ public class MypageServiceImpl implements MypageService{
 	@Override
 	public int pointRead(String userId) throws Exception {
 		return mypageMapper.pointRead(userId);
+	}
+
+	
+	// 내 정보 수정하기
+	@Override
+	public int update(Users user) throws Exception {
+		return mypageMapper.update(user);
 	}
 
 

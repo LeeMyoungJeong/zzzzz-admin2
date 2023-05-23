@@ -66,6 +66,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 			.antMatchers("/ground").hasRole("ADMIN")
 			.anyRequest().authenticated()			
 			;
+	
+		
+		// OAuth2 로그인 기능 활성화
+		// http.oauth2Login()
+		//	.loginPage("/login");
+		
 		
 		
 		

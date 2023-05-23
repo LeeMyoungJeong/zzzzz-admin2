@@ -120,7 +120,7 @@
   <div id="header">
   	<br>
     <h1><a href="/">짭랩풋볼</a></h1>
-    <h2>Match Info</h2>
+    <h2>HTML Template</h2>
     
     <!-- nav 영역 -->
     <ul id="nav">
@@ -166,13 +166,13 @@
       </th:block> -->
       
 		      <div id="featured-section-details">
-		        <h4 th:text="${match.playDate}"></h4>
+		        <h4 id="matchDate" th:text="${match.playDate}"></h4>
 		        <h4 th:text="${match.playTime}"></h4>
 		        <p><span id="payment">10000</span><span> 원 (2시간)</span></p>
 		        <p id="maxPlayerNo" th:text="|매치 정원 : ${match.maxPlayerNo} 명|"></p>
 		        <p id="totalPlayer" th:text="|현재 인원 : ${totalPlayer}  명|"></p>
 		        <!-- 이 신청하기 a 태그를 누르면 form이 submit 되도록 해야한다 -->
-		        <a class="button" onclick="checkPoints(event)" href="#">신청하기</a> 
+		        <a class="button" onclick="confirmCancellation()" href="#">취소하기</a> 
 		        <a class="button2" href="/match/list?matchNo=" + matchNo>목록으로</a>
 		        
 		      </div>
@@ -303,55 +303,34 @@
 		}
 		
 	
-	
-	// 매치 참여하기 기능
-	
-	function checkPoints(event) {
+	// 신청한 매치 취소
+	function confirmCancellation() {
+		// var userId = document.getElementById("userId").textContent;
+		var matchNoElement = document.getElementById("matchNo");
+		var matchNo = parseInt(matchNoElement.value);
+		var xhr = new XMLHttpRequest();		
 		
-		var text1 = document.getElementById("maxPlayerNo").textContent;
-		var text2 = document.getElementById("totalPlayer").textContent;
-		var tempmaxPlayerNo = text1.match(/: (.+) 명/)[1];
-		var temptotalPlayer = text2.match(/: (.+) 명/)[1];
-		var maxPlayerNo = parseInt(tempmaxPlayerNo)
-		var totalPlayer = parseInt(temptotalPlayer)
+		var matchDateElement = document.getElementById("matchDate");
+		var matchDate = matchDateElement.textContent;
 		
-		var userId = document.getElementById("userId").textContent;
-		// var matchNo = document.getElementById("matchNo").value;  --> 이거 안되는갑다
+		  if (confirm(userId + "님의 " + matchDate + "의 매치를 " + "정말 매치를 취소하시겠습니까?")) {
+			  
+			    xhr.open('GET', '/deletePlayer?userId=' + userId + '&matchNo=' + matchNo, true);
+			    xhr.onload = function () {
+			    	if (xhr.status === 200) {
+			    		if (xhr.responseText.trim() === "success") {
+						    alert("매치가 취소되었습니다.\n마이페이지의 메인화면으로 이동합니다.");
+	  					    location.href = "/mypage/main";
+			    		} else {
+						    alert("요청이 실행되지 않았습니다.");
+			    		}
+			    	}
+			    };
+		 		 xhr.send();
+			  }
+		}
+	
 
-		console.log("userId" +  userId);  // Id가 userId인 span 태그의 값 가져와서 userId에 저장.
-		event.preventDefault(); // 기본 동작 취소
-	
-		
-		
-				if (totalPlayer < maxPlayerNo) {
-					if (confirm ("해당 매치를 신청하시겠습니까?")) {
-			        var xhr2 = new XMLHttpRequest();
-					xhr2.open('GET','/checkPoints?userId='+userId+'&matchNo='+matchNo, true);
-					xhr2.onload = function () {
-						if(xhr2.status === 200) {
-						var response = JSON.parse(xhr2.responseText);
-						var result = response.result;
-						if(result < 10000) {
-							if (confirm("보유하신 포인트가 " + result + "원 남았습니다. 충전하시겠습니까?")) {
-									location.href = "/mypage/charge";
-							}
-						} else {
-							location.href = "/match/read?matchNo="+matchNo+"&groundName="+groundName; 
-						}
-					} 
-				
-					if(xhr2.status === 500) {
-						confirm("등록되었습니다.")
-					}	
-				};
-			
-				}
-				xhr2.send();
-			} else {
-				alert("해당 매치의 참가인원이 모두 찼습니다.\n" + "현재인원 : " + totalPlayer + ", 최대인원 : " + maxPlayerNo);
-			}
-		
-	};
 
 	
 	    

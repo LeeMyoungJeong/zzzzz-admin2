@@ -39,7 +39,7 @@
 	        </li>
 
 	        <li class="nav-item">
-	          <a class="nav-link" href="/board/list">매치참가</a>
+	          <a class="nav-link" href="/match/list">매치참가</a>
 	        </li>
 	        
 	        <li class="nav-item">
@@ -93,7 +93,7 @@
     <h2>any comments</h2>
     <ul id="nav">
       <li class="current"><a href="/">홈</a><span>/</span></li>
-      <li><a href="/match/list">내 정보</a><span>/</span></li>
+      <li><a href="/mypage/myInfo">내 정보</a><span>/</span></li>
       <li><a href="/mypage/charge">포인트 충전</a><span th:style="${userId != '이지용'} ? 'display:none' : ''">/</span></li>
         <ul>
           <li><a href="/board/list">Review</a></li>
@@ -150,11 +150,11 @@
 						<!-- 시간 -->
 						<td class="tdContent" th:text="${match.playTime}" width="110" style="text-align:center"></td>
 						<!-- 장소 -->
-						<td class="tdContent" width="200" >
+						<td class="tdContent" width="200">
 							<!-- #유틸리티객체.메소드	: 타임리프의 유틸리티 객체의 기능 사용 -->
 							<!-- #dates.format(Date타입 데이터, '포맷') : Date타입 데이터를 지정한 포맷으로 출력 -->
 							<!-- 왜 굳이 span 태그를 사용했는지는 잘 모르겠노... -->
-							<a th:text="${match.groundName}" th:href="|/match/read?matchNo=${match.matchNo}&groundName=${match.groundName}|"></a>
+							<a th:text="${match.groundName}" th:href="|/match/readAppliedMatch?matchNo=${match.matchNo}&groundName=${match.groundName}|"></a>
 						</td>
 						<!-- 참여인원 -->
 						<td class="tdContent" th:text="${match.maxPlayerNo}" width="50" style="text-align:center"></td>
@@ -168,7 +168,8 @@
   							<!-- <a th:text="${#dates.format(#dates.createNow().time, 'yyyy-MM-dd') &lt; #dates.format(match.playDate, 'yyyy-MM-dd') ? '예정' : '완료'}" th:href="${#dates.format(#dates.createNow().time, 'yyyy-MM-dd') &lt; #dates.format(match.playDate, 'yyyy-MM-dd') ? '/match/read?matchNo=' + match.matchNo + '&groundName=' + match.groundName : 'javascript:void(0)'}" th:if="${#dates.format(#dates.createNow().time, 'yyyy-MM-dd') &lt; #dates.format(match.playDate, 'yyyy-MM-dd')}"></a> -->
   							<a th:text="${#dates.format(#dates.createNow().time, 'yyyy-MM-dd') &lt; #dates.format(match.playDate, 'yyyy-MM-dd') ? '예정(취소가능)' : '완료'}" 
   							th:href="${#dates.format(#dates.createNow().time, 'yyyy-MM-dd') &lt; #dates.format(match.playDate, 'yyyy-MM-dd') ? '#' : '#'}" 
-  							th:if="${#dates.format(#dates.createNow().time, 'yyyy-MM-dd') &lt; #dates.format(match.playDate, 'yyyy-MM-dd')}" onclick="confirmCancellation()" ></a>
+  							th:if="${#dates.format(#dates.createNow().time, 'yyyy-MM-dd') &lt; #dates.format(match.playDate, 'yyyy-MM-dd')}"></a>
+  							<!-- onclick="cancelGogo()" -->
   							<span th:text="${#dates.format(#dates.createNow().time, 'yyyy-MM-dd') &gt;= #dates.format(match.playDate, 'yyyy-MM-dd') ? '완료' : ''}"></span>	
 						</td>
 					
@@ -198,6 +199,9 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
 
+
+
+
 $(function(){
     $('#chargebtn').click(function(){
         $.ajax({
@@ -220,9 +224,12 @@ $(function(){
     });
 });
 
+function cancelGogo() {
+	
+}
 
-function confirmCancellation() {
-	var userId = document.getElementById("userId").textContent;
+
+/*  function confirmCancellation() {
 	var matchNo = document.getElementById('matchNo').textContent;
 	var xhr = new XMLHttpRequest();		  
 	
@@ -234,7 +241,7 @@ function confirmCancellation() {
 		    	if (xhr.status === 200) {
 		    		if (xhr.responseText.trim() === "success") {
 					    alert("매치가 취소되었습니다.\n매치 목록으로 이동합니다.");
-  					    location.href = "/match/list";
+  					    location.href = "/vmatch/list";
 		    		} else {
 					    alert("요청이 실행되지 않았습니다.");
 		    		}
@@ -242,7 +249,7 @@ function confirmCancellation() {
 		    };
 	 		 xhr.send();
 		  }
-	}
+	}  */
 
 </script>	
 

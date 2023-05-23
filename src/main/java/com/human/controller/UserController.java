@@ -1,18 +1,24 @@
 package com.human.controller;
 
+import java.security.Principal;
+
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.LinkedMultiValueMap;
@@ -148,7 +154,7 @@ public class UserController {
 	// 카카오 로그인 ㄱㄱ
 	@GetMapping("/auth/kakaoCallback")
 	//@ResponseBody
-	public String kakaoCallback(HttpServletRequest request, String code) throws Exception { // data를 리턴해주는 컨트롤러 함수
+	public String kakaoCallback(HttpServletRequest request, String code, Principal principal) throws Exception { // data를 리턴해주는 컨트롤러 함수
 		
 		log.info("카카오 로그인 해보자");
 		/*
@@ -246,46 +252,97 @@ public class UserController {
 			e.printStackTrace();
 		}
 		
+		log.info("kakaoProfile : " + kakaoProfile);
+		
 		Users kakaoProfileUser = new Users();
 		kakaoProfileUser.setEmail(kakaoProfile.kakao_account.email);
 		kakaoProfileUser.setName(kakaoProfile.properties.nickname);
 		kakaoProfileUser.setUserId(kakaoProfile.kakao_account.email);
-		kakaoProfileUser.setName(kakaoProfile.properties.nickname);
+		kakaoProfileUser.setPhone(kakaoProfile.kakao_account.email);
 		kakaoProfileUser.setEnabled(1);
 	    
 		Users user = userService.findByUser(kakaoProfileUser);
+		
+		// 만약 기존에 회원가입이 되어있지 않다면 처리할 로직
 		if(user == null) {
-			int result = userService.join(kakaoProfileUser);
+			int result = userService.nonmemberJoin(kakaoProfileUser);
+			log.info("user가 null입니다. 기존회원이 아닙니다.");
 			user = userService.findByUser(kakaoProfileUser);
 		}
 		
-		if("이지용".equals(user.getName())) {
-			
-		}else {
-			
-		}
+		log.info("user(기존회원여부확인) : " + user);
 		
-		HttpSession session = request.getSession();
+		String garbagePassword = "123456";
+		user.setUserPw(garbagePassword);
+		//log.info("user(카카오로그인임시비번할당) : " + user);
+		
+		//if("이지용".equals(user.getName())) {
+		//}else {
+		//}
+		
+		
+		// System.out.println("카카오 아이디(번호) : " + kakaoProfile.getId());
+		// System.out.println("카카오 이메일 : " + kakaoProfile.getKakao_account().getEmail());
+		
+		
+		// String userId = user.getUserId();
+		// String userPw = user.getUserPw();
+		
+		// log.info("userId : " + userId);
+		// log.info("userPw : " + userPw);
+		// HttpSession session = request.getSession();
+
+		UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(user.getUserId(), user.getUserPw());
+		System.out.println("111111111111111");
+		//System.out.println("authenticationToken : " + authenticationToken);
+		
+		// authenticationToken.setDetails( new WebAuthenticationDetails(request));
+		// System.out.println("ggggggggggggggggg");
+		
+		Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(user.getUserId(), user.getUserPw()));
+		System.out.println("222222222222222");
+		
+		SecurityContextHolder.getContext().setAuthentication(authentication);
+		System.out.println("333333333333333");
 //		UserAuth userAuth = userAuthService.findUserAuthByUser(user);
 		
-		session.setAttribute("auth", "USER");
-		session.setAttribute("user", user);
-		
-		System.out.println("카카오 아이디(번호) : " + kakaoProfile.getId());
-		System.out.println("카카오 이메일 : " + kakaoProfile.getKakao_account().getEmail());
+		// session.setAttribute("auth", "USER");
+		//session.setAttribute("user", user);
+		//log.info("session : " + session.getAttribute("auth")); // USER로 잘 나온다.
 
-		String userId = user.getUserId();
-		String userPw = "kakao123456";
+		return "redirect:/";
 		
-		log.info("userId : " + userId);
-		log.info("userPw : " + userPw);
+		//user.setUserPwChk(userPw);
+
+		//log.info("user(비번 kakao123456 변경되었나확인ㄱ) : " + user);
 		
-		//UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userId, userPw);
-        //Authentication authentication = authenticationManager.authenticate(authenticationToken);
+		// userService.tokenAuthentication(user, request);
+		// UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(userId, userPw); 
+		
+		// 토큰에 요청정보를 등록. request로부터 온 요청임을 토큰에 알려준다.
+		// token.setDetails( new WebAuthenticationDetails(request));	
+		
+		// 이 토큰을 가지고 인증. 이게 제일 중요하다. 위에서 받아온 토큰을 가지고 이제 인증처리를 한다.
+		// Authentication authentication = authenticationManager.authenticate(token);		
+
+		// User authUser = (User) authentication.getPrincipal();
+		// log.info("인증된 사용자 아이디 이거는 토큰어센티케이션: " + authUser.getUsername());	
+		
+		// SecurityContextHolder.getContext().setAuthentication(authentication);
+		
+		// UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userId, userPw);
+		
+		//UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userId, "ROLE_USER");
+		//log.info("authenticationToken : " + authenticationToken);
+ 
+//////여기서부터 안됨....
+		//Authentication authentication = authenticationManager.authenticate(authenticationToken);
+        //log.info("authentication : " + authentication);
         //SecurityContextHolder.getContext().setAuthentication(authentication);
+        //log.info("마지막단계");
 		
 		//return response2.getBody();
-		return "/index";
+		//return new ResponseEntity<>(user.toString(), HttpStatus.OK);
 	}
 	
 

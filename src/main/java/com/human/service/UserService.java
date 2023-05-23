@@ -18,5 +18,7 @@ public interface UserService {
 	// 카카오 로그인 시 유저 찾기
 		public Users findByUser(Users user) throws Exception;
 
-	 
+	// 카카오 로그인 시 기존 회원 등록 안되어있을 때 회원 등록 처리
+		public int nonmemberJoin(Users kakaoProfileUser) throws Exception;
+		
 }

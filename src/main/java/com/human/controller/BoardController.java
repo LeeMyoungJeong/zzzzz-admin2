@@ -35,6 +35,7 @@ public class BoardController {
 	
 	// 게시글 목록 - 화면 GET
 	@GetMapping("/board/list")
+	@PreAuthorize("hasAnyRole('USER','ADMIN')")
 	public String list(Model model, Page page) throws Exception {
 		
 		List <Board> boardList = boardService.list(page);

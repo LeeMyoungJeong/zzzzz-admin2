@@ -17,5 +17,10 @@ public interface UserMapper {
 	// 아이디 중복 확인
     public int checkUserId(String userId) throws Exception;
 
+    // 카카오로 유저찾기
 	public Users findByUser(Users user);
+
+	// 마이페이지에서 내 정보 꺼내오기
+	public Users findFromMyinfo(String userId) throws Exception;
+	
 }

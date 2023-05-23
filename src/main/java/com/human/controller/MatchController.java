@@ -145,6 +145,54 @@ public class MatchController {
 		
 		return "/match/read";		
 	}
+	
+	// 내가 신청한 매치 조회하기 - Get
+	@GetMapping(path="/match/readAppliedMatch" , params = "matchNo")
+	@PreAuthorize("hasAnyRole('ADMIN','USER')")
+	public String readAppliedMatch(Model model, int matchNo, Files file, String groundName, Principal principal) throws Exception {
+		
+		System.out.println("내가 등록한" + matchNo + "번 매치 확인");
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		//String role = auth.getAuthorities();
+		log.info("auth : " + auth);
+		//log.info("username : " + username);
+		
+		String userId = principal.getName();
+		model.addAttribute("userId", userId);
+		
+		List <Players> playerList = matchService.playerList(matchNo);
+		log.info("playerList : " + playerList);
+		
+		
+		Match match = matchService.read(matchNo);
+		int totalPlayer = matchService.countTotalPlayer(matchNo);
+		
+		
+		GroundPic groundPic = matchService.readPic(groundName);
+		log.info("groundPic : " + groundPic);
+		// 첨부된 파일 조회
+		file.setParentTable("match");
+		file.setParentNo(matchNo);
+		List<Files> fileList = fileService.listByParentNo( file );
+		System.out.println(" file정보 : " + file);
+		
+		log.info("fileList1 : " + fileList); 
+		
+		model.addAttribute("playerList", playerList);
+		model.addAttribute("totalPlayer", totalPlayer);
+		log.info("totalPlayer : " + totalPlayer); 
+		model.addAttribute("match", match);
+		model.addAttribute("groundPic", groundPic);
+		model.addAttribute("matchNo", matchNo);
+		model.addAttribute("fileList", fileList); // 파일리스트를 모델에 등록하지 않아서 파일 목록이 나오지 않았던거임...
+		// 지금은 이미지를 불러오지 못해서 th:alt 속성이 나오고 있는것임
+		
+		log.info("fileList2 : " + fileList); 
+		// 작성자 본인만 수정/삭제할 수 있는 기능 아직 구현 X
+		// 파일 첨부 기능 아직 구현 X
+		
+		return "/match/readAppliedMatch";		
+	}
 
 
 	// 매치 삭제하기

@@ -65,7 +65,7 @@
 				<!-- isAuthenticated() : 인증된 사용자 이면 true, 아니면 false -->
 				<th:block sec:authorize="isAuthenticated()">
 					<!-- principal : 인증된 사용자 정보 객체 -->
-					<span sec:authentication="principal.username" class="text-white"></span>
+					<span id="userId" sec:authentication="principal.username" class="text-white"></span>
 					<button type="submit" class="btn btn-primary">로그아웃</button>
 					<button type="button" class="btn btn-success" onclick="location.href='/mypage/main'">마이페이지</button>					
 				</th:block>
@@ -217,6 +217,21 @@
 			location.href = "/qna/insert"
 			
 		}
+		
+	var userId = document.getElementById("userId").innerText;
+		
+		function moveInsert() {
+			
+			location.href = "/notice/insert"
+			
+		}
+		
+		// 아이디가 이지용이 아니라면 매치생성 불가능하게
+		  // alert(userId);
+		  if (userId !== "이지용") {
+		    var matchInsert = document.querySelector('a[href="/match/insert"]').parentNode;
+		    matchInsert.style.display = "none";
+		  }
 		
 	
 	</script>	
