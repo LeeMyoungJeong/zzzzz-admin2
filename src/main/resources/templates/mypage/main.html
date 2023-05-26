@@ -27,7 +27,7 @@
 		  <!-- 최상단 내비게이션바 -->
 	<nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
 	  <div class="container-fluid">
-	    <a class="navbar-brand" href="/">짭랩풋볼</a>
+	      <a class="navbar-brand" href="/"><img src="/images/jjab_icon.png" alt="짭랩풋볼" style="width: 50px; height: auto;"></a>
 	    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
 	      <span class="navbar-toggler-icon"></span>
 	    </button>
@@ -74,7 +74,7 @@
 					<!-- principal : 인증된 사용자 정보 객체 -->
 					<span id="userId" sec:authentication="principal.username" class="text-white"></span>
 					<button type="submit" class="btn btn-primary">로그아웃</button>
-					<button type="button" class="btn btn-success">마이페이지</button>
+					<button type="button" class="btn btn-success" onclick="location.href='/mypage/main'">마이페이지</button>
 				</th:block>
 		</form>
 	      
@@ -89,10 +89,11 @@
 
   <!-- header start -->
   <div id="header">
-    <h1><a href="#">짭랩풋볼</a></h1>
-    <h2>any comments</h2>
+  	<br>
+    <h1><a href="/">짭랩풋볼</a></h1>
+    <h2>Mypage > Home</h2>
     <ul id="nav">
-      <li class="current"><a href="/">홈</a><span>/</span></li>
+      <li class="current"><a href="/mypage/main">Mypage</a><span>/</span></li>
       <li><a href="/mypage/myInfo">내 정보</a><span>/</span></li>
       <li><a href="/mypage/charge">포인트 충전</a><span th:style="${userId != '이지용'} ? 'display:none' : ''">/</span></li>
         <ul>
@@ -104,6 +105,7 @@
       <!-- 제휴구장 목록은 관리자만 볼 수 있게 해야함 -->
       <li th:style="${userId != '이지용'} ? 'display:none' : ''"><a href="/ground/groundList">제휴구장 목록</a></li>
       <li th:style="${userId != '이지용'} ? 'display:none' : ''"><span>/</span><a href="/mypage/sales">매출 관리</a></li>
+      <li th:style="${userId != '이지용'} ? 'display:none' : ''"><span>/</span><a href="/mypage/statistics">통계</a></li>
       
      
     </ul>
@@ -161,7 +163,7 @@
 						<!-- 현재인원 -->
 						<td class="tdContent" th:text="${match.players}" width="80" style="text-align:center"></td>
 						<!-- 진행여부 -->
-						<td class="tdContent" width="80" style="text-align:center">
+						<td class="tdContent" width="120" style="text-align:center">
 							<!-- <a th:text="${#dates.format(#dates.createNow().time, 'yyyy-MM-dd') &lt; #dates.format(match.playDate, 'yyyy-MM-dd') ? '예정' : '완료'}"></a> -->
 							<!-- <a th:text="${#dates.format(#dates.createNow().time, 'yyyy-MM-dd') &lt; #dates.format(match.playDate, 'yyyy-MM-dd') ? '예정' : '완료'}" th:href="|/match/read?matchNo=${match.matchNo}&groundName=${match.groundName}|"></a> -->
 							<!-- <a th:text="${#dates.format(#dates.createNow().time, 'yyyy-MM-dd') &lt; #dates.format(match.playDate, 'yyyy-MM-dd') ? '예정' : '완료'}" th:href="${#dates.format(#dates.createNow().time, 'yyyy-MM-dd') &lt; #dates.format(match.playDate, 'yyyy-MM-dd') ? '/match/read?matchNo=' + match.matchNo + '&groundName=' + match.groundName : '#'}"></a> -->

@@ -177,7 +177,7 @@ public class UserController {
 		MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
 		params.add("grant_type", "authorization_code");
 		params.add("client_id", "6799cc9d0bc8986a498c73b770a27f09");
-		params.add("redirect_uri", "http://localhost:8080/auth/kakaoCallback");
+		params.add("redirect_uri", "http://58.72.151.122:8080/auth/kakaoCallback");
 		params.add("code", code);
 		
 		// HttpHeader와 HttpBody를 하나의 오브젝트에 담기
@@ -310,7 +310,7 @@ public class UserController {
 		//session.setAttribute("user", user);
 		//log.info("session : " + session.getAttribute("auth")); // USER로 잘 나온다.
 
-		return "redirect:/";
+		return "/index";
 		
 		//user.setUserPwChk(userPw);
 

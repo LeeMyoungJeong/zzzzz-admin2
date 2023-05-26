@@ -38,6 +38,7 @@ import com.human.domain.KakaoPayApproveVO;
 import com.human.domain.KakaoPayReadyVO;
 import com.human.domain.Match;
 import com.human.domain.Players;
+import com.human.domain.TotalRevenues;
 import com.human.domain.Users;
 import com.human.mapper.MatchMapper;
 import com.human.mapper.UserMapper;
@@ -249,7 +250,36 @@ public class MypageController {
     	return "/mypage/success";
     }
     
+    // 그래프를 가져올 화면단 자체 가져오기
+	@GetMapping("/mypage/statistics")
+	public String mng_stat(Model model, Principal principal) throws Exception {
+			
+		String userId = principal.getName();
+		model.addAttribute("userId", userId);
+		return "/mypage/statistics";
+	}
     
+    // 그래프 가져오기 
+	@GetMapping("/mng_getstat")
+	@ResponseBody
+	public List<TotalRevenues> mng_getstat(
+			@RequestParam("startdttm") String start,
+			@RequestParam("enddttm") String end) throws Exception {
+			
+		// 서버단에서 데이터를 가져와서 json 형태로 응답
+		// 받은 키값을 확인
+		System.out.println("시작날짜: " + start);
+		System.out.println("종료날짜: " + end);
+		
+		// 데이터만 절달
+		// json 형식으로 만들자
+		List<TotalRevenues> resultList = mypageService.getListPlayersDataBetween(start, end);
+		System.out.println("목록갯수: " + resultList.size());
+		System.out.println("resultList : " + resultList);
+		//HashMap map = new HashMap();
+		
+		return resultList;
+	}    
     
     
 }

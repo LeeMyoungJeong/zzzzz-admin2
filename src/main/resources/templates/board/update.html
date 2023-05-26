@@ -20,7 +20,7 @@
 	  <!-- 최상단 내비게이션바 -->
 	<nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
 	  <div class="container-fluid">
-	    <a class="navbar-brand" href="/">짭랩풋볼</a>
+	    <a class="navbar-brand" href="/"><img src="/images/jjab_icon.png" alt="짭랩풋볼" style="width: 50px; height: auto;"></a>
 	    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
 	      <span class="navbar-toggler-icon"></span>
 	    </button>
@@ -28,7 +28,7 @@
 	      <ul class="navbar-nav me-auto mb-2 mb-md-0">
 	       
 	        <li class="nav-item">
-	          <a class="nav-link active" aria-current="page" href="/board/aboutUs">About Us</a>
+	          <a class="nav-link" aria-current="page" href="/board/aboutUs">About Us</a>
 	        </li>
 	       
 	        <li class="nav-item">
@@ -36,7 +36,7 @@
 	        </li>
 	        
 	        <li class="nav-item">
-	          <a class="nav-link" href="/board/list">Review</a>
+	          <a class="nav-link active" href="/board/list">Review</a>
 	        </li>
 
 	        <li class="nav-item">
@@ -84,6 +84,8 @@
 	
 		
 	<div id = "board-basic-view">
+		<h3>Board</h3>
+		<h4>게시글 수정화면입니다</h4>
 	</div>
 	
 	
@@ -108,7 +110,7 @@
 			</tr>
 			<tr id="board">
 				<!-- 제목 -->
-				<td>내용</td>
+				<td><!-- 내용 --></td>
 				<td>
 					<textarea name="content" cols="40" rows="10" th:text=${board.content}></textarea>
 				</td>
@@ -152,13 +154,13 @@
 
 		<div>
 				<!-- 작성자 본인만 수정/삭제 가능하도록 하는 기능 구현해야 한다 -->
-				<button type="submit">수정</button>
+				<button type="submit" class="btn btn-success">수정</button>
 					<!-- 수정하시겠습니까?? 물어보면 좋을거같노 -->
-				<button type="button" onclick="moveDelete()">삭제</button>			
+				<button type="button" class="btn btn-danger" onclick="moveDelete()">삭제</button>			
 					<!-- 삭제하시겠습니까?? 물어보면 좋을거같노 일단넘어가자-->
 				<!-- 작성자 본인만 수정/삭제 가능하도록 하는 기능 구현해야 한다 -->
 			
-				<button type="button" onclick="moveList()">목록보기</button>  
+				<button type="button" class="btn btn-secondary" onclick="moveList()">목록보기</button>  
 		</div>
 	
 	</form>

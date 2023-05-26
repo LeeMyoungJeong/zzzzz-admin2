@@ -21,4 +21,15 @@
 		WHERE user_id = #{userId}
 	</update>
 
+	<!-- 회원 정보 가져오기 -->
+	<select id="getListPlayersDataBetween" resultType="TotalRevenues">
+		<![CDATA[	
+			SELECT TRUNC(reg_date) AS truncated_date, SUM(payment) AS total_payment
+			FROM players
+			WHERE REG_DATE >= #{param1} AND REG_DATE <= #{param2}
+			GROUP BY TRUNC(reg_date)
+			ORDER BY TRUNC(reg_date)
+		]]>
+	</select>
+
 </mapper>

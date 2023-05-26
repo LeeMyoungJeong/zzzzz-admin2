@@ -57,7 +57,7 @@
 
 	<nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
 	  <div class="container-fluid">
-	    <a class="navbar-brand" href="/">짭랩풋볼</a>
+	    <a class="navbar-brand" href="/"><img src="/images/jjab_icon.png" alt="짭랩풋볼" style="width: 50px; height: auto;"></a>
 	    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
 	      <span class="navbar-toggler-icon"></span>
 	    </button>
@@ -120,20 +120,17 @@
   <div id="header">
   	<br>
     <h1><a href="/">짭랩풋볼</a></h1>
-    <h2>HTML Template</h2>
+    <h2>Point Refund</h2>
     
     <!-- nav 영역 -->
     <ul id="nav">
-      <li><a href="/">홈</a><span>/</span></li>
-      <li class="current"><a href="/match/list">매치 참가</a><span>/</span></li>
+      <li><a href="/mypage/main">Mypage</a><span>/</span></li>
+      <li><a href="/match/list">매치 참가</a><span>/</span></li>
       <li sec:authorize="isAuthenticated()"><a href="/match/insert">매치 생성</a><span>/</span></li>
-      <li><a>게시판</a>
-        <ul>
-          <li><a href="/board/list">Review</a></li>
-          <li><a href="/notice/list">Notice</a></li>
-          <li><a href="/qna/list">QnA</a></li>
-        </ul>
-      </li>
+            <!-- 제휴구장 목록은 관리자만 볼 수 있게 해야함 -->
+      <li th:style="${userId != '이지용'} ? 'display:none' : ''"><a href="/ground/groundList">제휴구장 목록</a></li>
+      <li class="current" th:style="${userId != '이지용'} ? 'display:none' : ''"><span>/</span><a href="/mypage/sales">매출 관리</a></li>
+ 	  <li th:style="${userId != '이지용'} ? 'display:none' : ''"><span>/</span><a href="/mypage/statistics">통계</a></li>   
     </ul>
     <!-- nav영역 끝 -->
   </div>

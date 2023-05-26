@@ -20,7 +20,7 @@
 	   
 	<nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
 	  <div class="container-fluid">
-	    <a class="navbar-brand" href="/">짭랩풋볼</a>
+	    <a class="navbar-brand" href="/"><img src="/images/jjab_icon.png" alt="짭랩풋볼" style="width: 50px; height: auto;"></a>
 	    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
 	      <span class="navbar-toggler-icon"></span>
 	    </button>
@@ -66,8 +66,8 @@
 				<th:block sec:authorize="isAuthenticated()">
 					<!-- principal : 인증된 사용자 정보 객체 -->
 					<span sec:authentication="principal.username" class="text-white"></span>
-					<button type="button" class="btn btn-success">마이페이지</button>
 					<button type="submit" class="btn btn-primary">로그아웃</button>
+					<button type="button" class="btn btn-success" onclick="location.href='/mypage/main'">마이페이지</button>
 				</th:block>
 		</form>
 	      
@@ -81,14 +81,85 @@
 	
 	
 		<main class="container mt-5">
+			<br>
 			<div class="d-flex justify-content-center">
 				<img alt="About Us" src="/images/aboutUs.png">
 			</div> <br>
-			<div>
-				<p>재밌게 운동하고 환급받자</p><br>
-				<p></p>
-						
+			<div class="d-flex justify-content-center">
+				<h1>재밌게 운동하고 환급받자</h1>
 			</div>
+			
+			<div class="d-flex justify-content-center">
+				<h6>매니저가 없어도 매너있게 공 차고 환급까지!!</h6>
+			</div>
+			<br>
+<!-- 			<div class="container-fluid">
+					<div class="col">
+				<ul>
+						<li>
+							<div>
+								<h3>내가 하고 싶을 때</h3>
+								<p>다양한 시간에</p>						
+							</div>
+						</li>
+					</div>
+					<div class="col">
+						<li>
+							<div class="col-4">
+								<h3>내가 하고 싶은 곳에서</h3>
+								<p>가까운 풋살장 어디서나</p>						
+							</div>
+						</li>
+					</div>
+					<div class="col">
+						<li>
+							<div class="col-4">
+								<h3>내가 하고 싶을 사람들과</h3>
+								<p>나 혼자, 친구랑, 함께</p>						
+								<p>즐겁게 공차고 포인트 환급까지!!</p>						
+							</div>
+						</li>
+					</div>	
+				</ul>
+			</div> -->
+			
+			<div class="container-fluid">
+			  <div class="row">
+			    <div class="col">
+			          <div class="text-center">
+			            <h3>내가 하고 싶을 때</h3>
+			            <p>다양한 시간에</p>						
+			          </div>
+			    </div>
+			    <div class="col">
+			          <div class="text-center">
+			            <h3>내가 하고 싶은 곳에서</h3>
+			            <p>가까운 풋살장 어디서나</p>						
+			          </div>
+			    </div>
+			    <div class="col">
+			          <div class="text-center">
+			            <h3>내가 하고 싶을 사람들과</h3>
+			            <p>나 혼자, 친구랑, 함께</p>						
+			          </div>
+			    </div>	
+			  </div>
+			</div>
+			
+			
+			<div class="d-flex justify-content-center">
+				<h1>HOW TO</h1>
+			</div>
+			<div class="d-flex justify-content-center">
+				<h6>짭랩하는 방법</h6>
+			</div>
+			
+			<div>
+				<img alt="About Us" src="/images/howto.png">
+			</div>
+			
+			
+			
 		</main>
 	
 </body>

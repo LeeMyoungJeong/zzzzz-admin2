@@ -20,7 +20,7 @@
 	<!-- 최상단 내비게이션바 -->
 	<nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
 	  <div class="container-fluid">
-	    <a class="navbar-brand" href="/">짭랩풋볼</a>
+	    <a class="navbar-brand" href="/"><img src="/images/jjab_icon.png" alt="짭랩풋볼" style="width: 50px; height: auto;"></a>
 	    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
 	      <span class="navbar-toggler-icon"></span>
 	    </button>
@@ -28,7 +28,7 @@
 	      <ul class="navbar-nav me-auto mb-2 mb-md-0">
 	       
 	        <li class="nav-item">
-	          <a class="nav-link active" aria-current="page" href="/board/aboutUs">About Us</a>
+	          <a class="nav-link" aria-current="page" href="/board/aboutUs">About Us</a>
 	        </li>
 	       
 	        <li class="nav-item">
@@ -40,7 +40,7 @@
 	        </li>
 
 	        <li class="nav-item">
-	          <a class="nav-link" href="/notice/list">Notice</a>
+	          <a class="nav-link active" href="/notice/list">Notice</a>
 	        </li>
 
 	        <li class="nav-item">
@@ -152,12 +152,12 @@
 			<div>
 				<!-- 작성자 본인만 수정/삭제 가능하도록 하는 기능 구현해야 한다 >> 구현 完-->
 				<th:block th:if="${writer}">
-					<button type="button" onclick="moveUpdate()">수정</button>			
-					<button type="submit">삭제</button>
+					<button type="button" class="btn btn-success" onclick="moveUpdate()">수정</button>			
+					<button type="submit" class="btn btn-danger" >삭제</button>
 				</th:block>
 				<!-- 작성자 본인만 수정/삭제 가능하도록 하는 기능 구현해야 한다 >> 구현 完 -->
 			
-				<button type="button" onclick="moveList()">목록보기</button>  
+				<button type="button" class="btn btn-secondary" onclick="moveList()">목록보기</button>  
 			</div>
 	
 	</form>

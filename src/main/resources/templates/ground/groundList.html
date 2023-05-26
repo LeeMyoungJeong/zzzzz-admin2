@@ -20,7 +20,7 @@
 			  <!-- 최상단 내비게이션바 -->
 	<nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
 	  <div class="container-fluid">
-	    <a class="navbar-brand" href="/">짭랩풋볼</a>
+	    <a class="navbar-brand" href="/"><img src="/images/jjab_icon.png" alt="짭랩풋볼" style="width: 50px; height: auto;"></a>
 	    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
 	      <span class="navbar-toggler-icon"></span>
 	    </button>
@@ -80,14 +80,15 @@
 	<!-- 최상단 내비게이션바 끝 -->
 	
   <div id="header">
-    <h1><a href="#">짭랩풋볼</a></h1>
-    <h2>any comments</h2>
+    <h1><a href="/">짭랩풋볼</a></h1>
+    <h2>Ground List</h2>
     <ul id="nav">
-      <li><a href="/">홈</a><span>/</span></li>
-      <li><a href="/match/list">내 정보</a><span>/</span></li>
+      <li><a href="/mypage/main">Mypage</a><span>/</span></li>
+      <li><a href="/mypage/myInfo">내 정보</a><span>/</span></li>
        <li><a href="/mypage/charge">포인트 충전</a><span th:style="${userId != '이지용'} ? 'display:none' : ''">/</span></li>
        <li class="current" th:style="${userId != '이지용'} ? 'display:none' : ''"><a href="/ground/groundList">제휴구장 목록</a></li>
       <li th:style="${userId != '이지용'} ? 'display:none' : ''"><span>/</span><a href="/mypage/sales">매출 관리</a></li>
+      <li th:style="${userId != '이지용'} ? 'display:none' : ''"><span>/</span><a href="/mypage/statistics">통계</a></li>
     </ul>
   </div>
   <!--end header-->		
@@ -100,7 +101,7 @@
         <table>
           <thead>
             <tr>
-              <td width="300" align="center"><b>구장 이름</b></td>
+              <td width="330" align="center"><b>구장 이름</b></td>
               <td width="300" align="center"><b>구장 주소</b></td>
               <td width="100" align="center"><b>모집 정원</b></td>
             </tr>
@@ -115,7 +116,9 @@
               <tr>
                 <!-- 구장 이름 -->
                 <td>					
-                  <a th:text="${ground.groundName}" th:href="|/ground/check?groundNo=${ground.groundNo}|"></a>
+                  <a th:text="${ground.groundName}" href="#"></a>
+				  <!-- 추후에 아래 부분에 들어가서 구장 정보 수정하도록 해야한다. -->
+                  <!-- <a th:text="${ground.groundName}" th:href="|/ground/check?groundNo=${ground.groundNo}|"></a> -->
                 </td>
                 <!-- 구장 주소 -->
                 <td>

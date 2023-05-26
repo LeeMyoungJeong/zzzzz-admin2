@@ -7,6 +7,7 @@ URL:http://www.chris-creed.com
 
 /* -- Color:Blue - #0B79A3 -- */
 
+
 @import "reset.css";
 /* ------------- */
 /* -- Helpers -- */
@@ -25,12 +26,13 @@ URL:http://www.chris-creed.com
 	margin:0 auto;
 }
 body{
-	font:normal 14px/1.618 arial, sans-serif;
+	font-family: 'Do Hyeon', sans-serif;
 	background:url(../images/main-bg.jpg) repeat-x;
 	color:#444444;
 
 }
 h1, h2, h3, h4, h5, h6{
+	font-family: 'Do Hyeon', sans-serif;
 	margin:20px 0 0 0;
 }
 h1{
@@ -167,7 +169,7 @@ blockquote{
 	float:left;
 	font-size:70px;
 	letter-spacing:-3px;
-	font-family:"Myriad Pro", "Gill Sans", "Gill Sans MT", Calibri, sans-serif;
+	font-family: 'Do Hyeon', sans-serif;
 	color:#222;
 	margin:0;
 	font-weight:bold;
@@ -179,7 +181,7 @@ blockquote{
 #header h2{
 	float:right;
 	color:#ccc;
-	font-family:"Myriad Pro", "Gill Sans", "Gill Sans MT", Calibri, sans-serif;
+	font-family: 'Do Hyeon', sans-serif;
 	letter-spacing:-1px;
 	margin:40px 0 0 0;
 	font-size:34px;
@@ -201,7 +203,7 @@ blockquote{
 #nav a{
 	float:left;
 	display:block;
-	font:normal 18px Arial, sans-serif;
+	font-family: 'Do Hyeon', sans-serif;
 	color:#555555;
 }
 #nav li a:hover{
@@ -288,7 +290,7 @@ blockquote{
 }
 
 #featured-section h3{
-	font-family:"Myriad Pro", "Gill Sans", "Gill Sans MT", Calibri, sans-serif;
+	font-family: 'Do Hyeon', sans-serif;;
 	font-size:40px;
 	letter-spacing:-1px;
 	color:#444444;
